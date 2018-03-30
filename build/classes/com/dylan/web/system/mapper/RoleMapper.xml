@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dylan.web.system.mapper.RoleMapper">
+
+	<!-- 根据管理员ID查询管理员拥有的角色 -->
+	 <select id="selectRolesByManagerId"  resultType="com.dylan.core.entity.E"  parameterType="map">
+        select r.* from system_manager_role r 
+        left join system_role mr on r.roleId = mr.roleId
+        where r.managerId = #{managerId}
+    </select>
+ 	<!-- 根据角色ID查询拥有的菜单列表 -->
+	<select id="selectResourceByRoles"  resultType="com.dylan.core.entity.E"  parameterType="java.util.List">
+        select distinct r.* from system_resource r
+        left join system_role_resource rr on r.resourceId=rr.resourceId
+        where 1=1 
+        <if test=" list!=null and list.size>0 ">
+       	 	and  rr.roleId in
+	        <foreach collection="list"  item="role" separator="," open="(" close=")">
+	            #{role.roleId}
+	        </foreach>
+        </if>
+     </select>
+     <select id="selectList" resultType="com.dylan.core.entity.E"  parameterType="map">
+     select * from system_role
+     where 1=1
+     <if test="roleName != null and roleName != ''">
+         and roleName like concat('%',#{roleName},'%')
+     </if>
+     </select>
+      <select id="selectById" resultType="com.dylan.core.entity.E"  parameterType="map">
+     select * from system_role where roleId=#{roleId}
+     </select>
+      <!-- 新增 -->
+	 <insert id="insert"  parameterType="map">
+        insert into system_role
+        (
+
+		roleName,
+		roleSign,
+		description
+        )
+        values
+        (
+
+		#{roleName},
+		#{roleSign},
+		#{description}
+        )
+     </insert>
+     <!-- 删除 -->
+     <delete id="remove"   parameterType="map">
+        delete from system_role where roleId=#{roleId}
+     </delete>
+     <!-- 修改 -->
+     <update id="edit"   parameterType="map">
+        update system_role set
+        <if test="roleName!=null and roleName!=''">
+       	 	 roleName=#{roleName},
+        </if>
+        <if test="roleSign!=null and roleSign!=''">
+       		roleSign=#{roleSign},
+        </if>
+        description=#{description}
+        where roleId=#{roleId}
+     </update>
+     
+      <insert id="insertRoleResource"  parameterType="map">
+        insert into system_role_resource
+        (
+		roleId,
+		resourceId
+        )
+        values
+        (
+        #{roleId},
+		#{resourceId}
+        )
+     </insert>
+    <delete id="cleanRoleResourceByroleId" parameterType="map"> 
+		delete from system_role_resource where roleId=#{roleId}
+	</delete>
+     
+     <select id="isExitsPermission" resultType="com.dylan.core.entity.E"  parameterType="map">
+     select * from system_permission where permissionName=#{permissionName} and permissionSign=#{permissionSign} limit 1
+     </select>
+     <insert id="insertPermission"  parameterType="map">
+        insert into system_permission
+        (
+		permissionName,
+		permissionSign,
+		description
+        )
+        values
+        (
+        #{permissionName},
+		#{permissionSign},
+		#{description}
+        )
+     </insert>
+     <!-- 清理角色的所有操作权限，重新初始化，避免重复脏数据出现 -->
+     <delete id="cleanRolePermissionByroleId" parameterType="map"> 
+		delete from system_role_permission where roleId=#{roleId}
+	</delete>
+	<insert id="insertRolePermission"  parameterType="map">
+        insert into system_role_permission
+        (
+		roleId,
+		permissionId
+        )
+        values
+        (
+        #{roleId},
+		#{permissionId}
+        )
+     </insert>
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dylan.web.system.mapper.ResourceMapper">
+	 <!-- 新增 -->
+	 <insert id="insert"  parameterType="map">
+        insert into system_resource
+        (
+		resourceName,
+		parentId,
+		resourceSign,
+		type,
+		restUrl,
+		level,
+		cssIcon,
+		isShow,
+		description
+        )
+        values
+        (
+        #{resourceName},
+		#{parentId},
+		#{resourceSign},
+		#{type},
+		#{restUrl},
+		#{level},
+		#{cssIcon},
+		#{isShow},
+		#{description}
+        )
+     </insert>
+     <!-- 删除 -->
+     <delete id="remove"   parameterType="map">
+        delete from system_resource where resourceId=#{resourceId}
+     </delete>
+     <!-- 修改 -->
+     <update id="edit"   parameterType="map">
+        update system_resource set
+        <if test="resourceName!=null and resourceName!=''">
+       	 	 resourceName=#{resourceName},
+        </if>
+        <if test="parentId!=null">
+        	 parentId=#{parentId},
+        </if>
+        <if test="resourceSign!=null and resourceSign!=''">
+       		resourceSign=#{resourceSign},
+        </if>
+        <if test="type!=null">
+       		type=#{type},
+        </if>
+        <if test="restUrl!=null and restUrl!=''">
+      		restUrl=#{restUrl},
+        </if>
+        <if test="level!=null">
+        	level=#{level},
+        </if>
+        <if test="cssIcon!=null and cssIcon!=''">
+        	cssIcon=#{cssIcon},
+        </if>
+        <if test="isShow!=null">
+        	isShow=#{isShow},
+        </if>
+        <if test="description!=null and description!=''">
+        	description=#{description},
+        </if>
+        resourceId=resourceId
+        where resourceId=#{resourceId}
+     </update>
+     <!-- 查询 -->
+	 <select id="selectList"  resultType="com.dylan.core.entity.E"  parameterType="map">
+        select * from system_resource
+     </select>
+ 	 <!-- 根据ID查询 -->
+	 <select id="selectById"  resultType="com.dylan.core.entity.E"  parameterType="map">
+        select * from system_resource where resourceId=#{resourceId}
+     </select>
+	
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.springframework.org/schema/jdbc
+    http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+    http://www.springframework.org/schema/cache
+    http://www.springframework.org/schema/cache/spring-cache.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util.xsd"
+       default-lazy-init="true">
+
+
+    <!-- 自动扫描包 ,将带有注解的类 纳入spring容器管理 -->
+    <context:component-scan base-package="com.dylan"></context:component-scan>
+
+    <!-- 启用对事务注解的支持,自动扫描 -->
+    <tx:annotation-driven/>
+
+    <!-- 引入配置文件 -->
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:config.properties</value>
+            </list>
+        </property>
+    </bean>
+    <!--spring mybatis 数据库连接配置 -->
+    <import resource="spring-mybatis.xml"/>
+
+    <!-- 配置使Spring采用CGLIB代理 -->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <!-- Cache配置 -->
+    <cache:annotation-driven cache-manager="cacheManager"/>
+    <bean id="ehCacheManagerFactory"
+          class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
+          p:configLocation="classpath:ehcache.xml"/>
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager"
+          p:cacheManager-ref="ehCacheManagerFactory"/>
+    <!-- spring自动任务调度器配置 -->
+    <!-- 定时任务配置 -->
+    <!-- 要调用的工作类 -->
+    <bean id="SpringQtzJob" class="com.dylan.web.wages.util.SendMailQuartz"/>
+    <bean id="SpringReQtzJob" class="com.dylan.web.wages.util.SendReMailQuartz"/>
+    <!-- 任务配置列表 -->
+    <bean id="SpringQtzJobMethod"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 调用的类 -->
+        <property name="targetObject">
+            <ref bean="SpringQtzJob"/>
+        </property>
+        <!-- 调用类中的方法 -->
+        <property name="targetMethod">  <!-- 要执行的方法名称 -->
+            <value>sendEmail</value>
+        </property>
+    </bean>
+    <bean id="SpringReQtzJobMethod"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 调用的类 -->
+        <property name="targetObject">
+            <ref bean="SpringReQtzJob"/>
+        </property>
+        <!-- 调用类中的方法 -->
+        <property name="targetMethod">  <!-- 要执行的方法名称 -->
+            <value>sendEmail</value>
+        </property>
+    </bean>
+
+    <!-- ======================== 调度触发器 ======================== -->
+    <!-- 触发器配置 时间指定 -->
+    <bean id="CronTriggerFactoryBean"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="SpringQtzJobMethod"></property>
+        <property name="cronExpression" value="0 12 14 ? * *"></property>
+    </bean>
+    <bean id="ReCronTriggerFactoryBean"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="SpringReQtzJobMethod"></property>
+        <property name="cronExpression" value="0 22 14 ? * *"></property>
+    </bean>
+
+    <!-- ======================== 调度工厂 ======================== -->
+    <bean id="SpringJobSchedulerFactoryBean"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <!-- 触发器列表 -->
+                <ref bean="CronTriggerFactoryBean"/>
+                <ref bean="ReCronTriggerFactoryBean"/>
+            </list>
+        </property>
+    </bean>
+
+</beans>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dylan.web.wages.mapper.WagesTotalMapper">
+	<insert id="insertMainTotal" parameterType="map">
+		insert into
+		wages_total(
+		yftotal_value,
+		sftotal_value,
+		salt,
+		total_year,
+		total_month,
+		memo
+		)
+		values (
+		#{yfTotal},
+		#{sfTotal},
+		#{salt},
+		#{total_year},
+		#{total_month},
+		#{memo}
+		)
+	</insert>
+
+	<insert id="insertReTotal" parameterType="map">
+		insert into
+		wages_retotal(
+		sftotal_value,
+		salt,
+		total_year,
+		total_month,
+		memo
+		)
+		values (
+		#{sfTotal},
+		#{salt},
+		#{total_year},
+		#{total_month},
+		#{memo}
+		)
+	</insert>
+	<select id="selectMainTotal" resultType="com.dylan.core.entity.E"
+		parameterType="map">
+		select 
+		yftotal_value as yfTotal,
+		sftotal_value as sfTotal,
+		salt,
+		total_year as wagesYear,
+		total_month as wagesMonth
+		from
+		wages_total
+		<where>
+			<if test="year != null and year != ''">
+				AND total_year = #{year}
+			</if>
+			<if test="month != null and month != ''">
+				AND total_month = #{month}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectReTotal" resultType="com.dylan.core.entity.E"
+		parameterType="map">
+		select 
+		sftotal_value as sfTotal,
+		salt,
+		total_year as wagesYear,
+		total_month as wagesMonth
+		from
+		wages_retotal
+		<where>
+			<if test="year != null and year != ''">
+				AND total_year = #{year}
+			</if>
+			<if test="month != null and month != ''">
+				AND total_month = #{month}
+			</if>
+		</where>
+	</select>
+	
+</mapper>

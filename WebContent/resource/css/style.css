@@ -1,0 +1,250 @@
+/*-- Reset-Code --*/
+body {
+    padding: 0;
+    margin: 0;
+    background: #FFF;
+    font-size:14px;
+    font-family: 'Microsoft?YaHei', sans-serif;
+}
+body a {
+    transition: 0.5s all;
+    -webkit-transition: 0.5s all;
+    -moz-transition: 0.5s all;
+    -o-transition: 0.5s all;
+    -ms-transition: 0.5s all;
+    text-decoration: none;
+}
+body a:hover {
+    text-decoration: none;
+}
+body a:focus, a:hover {
+    text-decoration: none;
+}
+input[type="button"], input[type="submit"] {
+    transition: 0.5s all;
+    -webkit-transition: 0.5s all;
+    -moz-transition: 0.5s all;
+    -o-transition: 0.5s all;
+    -ms-transition: 0.5s all;
+}
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+p {
+    margin: 0;
+    font-family: 'Microsoft?YaHei', sans-serif;
+    color:#fff;
+}
+ul {
+    margin: 0;
+    padding: 0;
+}
+label {
+    margin: 0;
+}
+a:focus, a:hover {
+    text-decoration: none;
+    outline: none;
+}
+/*----nav----*/
+.top-main{
+    background:#000;
+    padding: 0 2em;
+}
+.number h3 {
+    color: #fff;
+    font-size: 1em;
+    line-height: 1em;
+    margin: 1em 0 0;
+}
+.number h3 i.fa.fa-phone {
+    margin-right: .5em;
+}
+.number {
+    float: left;
+}
+.social-icons{
+    float: right;
+}
+.form-top {
+    float: right;
+    margin: .8em 0;
+}
+.navbar-left {
+    float: none !important;
+    margin: 0px;
+}
+.form-group a{
+    color: #000;
+}
+.form-group a:hover{
+    color: #00a0dc;
+}
+.logo a {
+    color: #000;
+    font-size: 3em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+span {
+    color: #ffb900;
+    font-weight: normal;
+    text-transform: capitalize;
+}
+.logo {
+    text-align: center;
+    margin:1em 0;
+}
+.navbar-default {
+    border-radius: 0px;
+}
+.navbar-default .navbar-nav > li > a {
+    color: #fff;
+    font-size: 14px;
+    text-transform: capitalize;
+}
+.navbar-default .navbar-nav > li > a:visited {
+    color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a:hover {
+     color: #ffffff;
+     background: #ffb900;
+ }
+.navbar-default .navbar-nav .active{
+    color: #ffffff;
+    background: #ffb900;
+}
+.container > .navbar-header, .container-fluid > .navbar-header, .container > .navbar-collapse, .container-fluid > .navbar-collapse {
+    margin-right: 0;
+    margin-left: 0;
+}
+.navbar-nav > li {
+    float: none;
+    display: inline-block;
+}
+.navbar-nav > li > a {
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+.navbar {
+    margin-bottom:0;
+    min-height:0px;
+}
+.navbar-right {
+    float: none !important;
+    text-transform: uppercase;
+    background: transparent;
+
+}
+.agileits_copyright {
+    background: #000;
+    color: #ffffff;
+    padding: 1em;
+}
+.agileits_copyright p{
+    font-size:1em;
+}
+.personal-logo{
+    width: 150px;
+    height: 35px;
+}
+.container-fluid {
+    padding-right: 0px;
+    padding-left: 0px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.navbar-nav>li>a{
+    line-height: 30px;
+    padding: 10px 15px;
+}
+.navbar-nav>li>img{
+    margin-right: 74px;
+    margin-left: 25px;
+}
+/*@media (max-width: 1024px){
+    .logo a {
+        font-size: 2.5em;
+    }
+}*/
+/*@media (max-width: 736px){
+    .navbar-form .form-group {
+        margin-bottom: 0;
+    }
+    .navbar-form {
+        padding: 0;
+    }
+    .container-fluid {
+        padding-right: 0;
+        padding-left: 0;
+    }
+    .navbar-collapse {
+        padding-right: 0;
+        padding-left: 0;
+    }
+    .navbar-nav > li {
+        display: block;
+    }
+    .navbar-nav {
+        margin: 0;
+    }
+}*/
+/*
+@media (max-width: 568px){
+    .logo {
+        margin:.5em 0;
+    }
+}
+@media (max-width: 480px){
+    .number {
+        float: none;
+        text-align: center;
+    }
+    .number h3 {
+        margin: 0;
+    }
+}
+@media (max-width: 414px){
+    .number h3 {
+        margin: 0;
+    }
+    .number {
+        float: none;
+        text-align: center;
+    }
+    .number h3 {
+        padding: 1em 0 0;
+    }
+    .social-icons {
+        float: none;
+        text-align: center;
+    }
+    .form-top {
+        float: none;
+        margin: .5em auto 1em;
+        width: 50%;
+        text-align: center;
+    }
+    .navbar-form {
+        padding: 0 .5em;
+    }
+    .navbar-left {
+        float: none !important;
+    }
+    .logo a {
+        font-size: 2em;
+    }
+}
+@media (max-width: 384px){
+    .navbar-nav > li > a {
+        padding-top: .5em;
+        padding-bottom: .5em;
+    }
+}
+@media (max-width: 320px){
+    .form-top {
+        width: 67%;
+    }
+}
+*/

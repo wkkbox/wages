@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dylan.web.system.mapper.ManagerMapper">
+
+	<select id="selectOne" resultType="com.dylan.core.entity.E"
+		parameterType="map">
+		select
+		* from
+		system_manager
+		where
+		accountName=#{accountName}
+	</select>
+	<select id="selectList" resultType="com.dylan.core.entity.E"
+		parameterType="map">
+		select
+		* from
+		system_manager
+		<where>
+			<if test="manaherName !=null and manaherName !='' ">
+				and manaherName like concat('%',#{manaherName},'%')
+			</if>
+		</where>
+	</select>
+	<!-- and type != 0 -->
+	<select id="selectAccountName" resultType="com.dylan.core.entity.E"
+		parameterType="map">
+		select
+		accountName,mail,manaherName from
+		system_manager
+		where 1=1
+		and type != 0
+	</select>
+
+	<select id="selectManagerNames" resultType="com.dylan.core.entity.E"
+		parameterType="map">
+		select
+		manaherName from
+		system_manager
+		where 1=1
+	</select>
+
+	<select id="selectManager" resultType="com.dylan.core.entity.E"
+		parameterType="map">
+		select
+		idCardNO,manaherName
+		from system_manager
+		where 1 = 1 
+		AND
+		idCardNO = #{idCardNO}
+		AND
+		manaherName = #{manaherName}
+	</select>
+
+	<select id="selectById" resultType="com.dylan.core.entity.E"
+		parameterType="map">
+		select * from system_manager where id=#{managerId}
+	</select>
+	<!-- 新增 -->
+	<insert id="insert" parameterType="map">
+		insert into system_manager
+		(
+		manaherName,
+		accountName,
+		password,
+		idCardNO,
+		mail,
+		salt,
+		createTime
+		)
+		values
+		(
+		#{managerName},
+		#{idCardNO},
+		#{password},
+		#{idCardNO},
+		#{mail},
+		#{salt},
+		#{createTime}
+		)
+	</insert>
+	<!-- 删除 -->
+	<delete id="remove" parameterType="map">
+		delete from system_manager
+		where managerId=#{managerId}
+	</delete>
+	<!-- 修改密码和重置密码 -->
+	<update id="edit" parameterType="map">
+		update system_manager 
+		set
+		password=#{password},
+		<if test="mail !=null and mail !='' ">
+			mail=#{mail},
+		</if>
+		salt=#{salt}
+		where id=#{managerId}
+	</update>
+
+	<!-- 新增 -->
+	<insert id="insertManagerAndRole" parameterType="map">
+		insert into
+		system_manager_role
+		(
+		managerId,
+		roleId
+
+		)
+		values
+		(
+		#{managerId},
+		#{roleId}
+		)
+	</insert>
+	<delete id="removeManagerAndRole" parameterType="map">
+		delete from
+		system_manager_role where managerId=#{managerId}
+	</delete>
+	<!-- 查询登录者的shopid -->
+	<select id="selectShopByManagerId" resultType="com.dylan.core.entity.E"
+		parameterType="map">
+		select
+		* from
+		shop_manager where managerId=#{managerId}
+		limit 1
+	</select>
+</mapper>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dylan.web.wages.mapper.WagesReParentMapper">
+
+    <sql id="selectColumn">
+		t.id as id,
+		t.managerName as managerName,
+		t.wages_month as wagesMonth,
+		t.wages_year as wagesYear,
+		t.createBy as createBy,
+		t.createTime as createTime,
+		t.memo as memo
+	</sql>
+
+    <sql id="queryCondition">
+        <if test="id != null">
+            AND t.id = #{id}
+        </if>
+        <if test="managerName != null and managerName !=''">
+            AND t.managerName = #{managerName}
+        </if>
+        <if test="wagesMonth != null">
+            AND t.wages_month = #{wagesMonth}
+        </if>
+        <if test="wagesYear != null">
+            AND t.wages_year = #{wagesYear}
+        </if>
+        <if test="createBy != null">
+            AND t.createBy = #{createBy}
+        </if>
+        <if test="createTime != null and createTime != ''">
+            AND t.createTime = #{createTime}
+        </if>
+        <if test="memo != null and memo != ''">
+            AND t.memo = #{memo}
+        </if>
+    </sql>
+
+    <select id="selectListByManagerId" resultType="com.dylan.core.entity.E"
+            parameterType="map">
+        select
+        *
+        from wages_parent as t
+        left join wages_detail as t1 on t.id=t1.parentId
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <include refid="queryCondition"/>
+        </trim>
+    </select>
+    <select id="selectList" resultType="com.dylan.core.entity.E"
+            parameterType="map">
+        select
+        *
+        from wages_parent as t
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <include refid="queryCondition"/>
+        </trim>
+    </select>
+    <select id="selectWagesParent" resultType="com.dylan.core.entity.E"
+            parameterType="map">
+        SELECT
+        <include refid="selectColumn"/>
+        ,t1.manaherName as createByName,t3.header_value as headerValue,t3.salt as salt
+        FROM wages_reparent t
+        LEFT JOIN system_manager t1 on t.createBy=t1.id
+        LEFT JOIN wages_reheader as t2 on t.id=t2.parentId
+        LEFT JOIN wages_reheader_value as t3 on t2.id=t3.headerId
+        WHERE t2.header='实发合计'
+        <if test="managerName != null and managerName !=''">
+            AND t.managerName like CONCAT('%',#{managerName},'%')
+        </if>
+        <if test="year != null and year != ''">
+            AND t.wages_year = #{year}
+        </if>
+        <if test="month != null and month != ''">
+            AND t.wages_month = #{month}
+        </if>
+    </select>
+
+    <select id="selectWagesDetail" resultType="com.dylan.core.entity.E"
+            parameterType="map">
+		SELECT t1.header as header,t2.header_value as hreaderValue,t2.salt as salt 
+		FROM wages_reparent as t
+		LEFT JOIN wages_reheader as t1 
+		ON t.id=t1.parentId
+		LEFT JOIN wages_reheader_value as t2 
+		on t1.id =t2.headerId
+		WHERE t.id=#{id}
+		AND t1.header!='无'
+		AND t1.header!='银行账号'
+		AND t1.header!='薪酬发放单位'
+		AND t1.header!='身份证号码'
+		AND t1.header!='用工类别'
+		AND t1.header!='进公司时间'
+		AND t1.header!='薪酬形式'
+		AND t1.header!='预发月标准'
+		AND t1.header!='序号'
+	</select>
+    <select id="selectWagesDetailMail" resultType="com.dylan.core.entity.E"
+            parameterType="map">
+		SELECT t.id as parentId,t.managerName as managerName
+		FROM wages_reparent t
+		LEFT JOIN system_manager s_m
+		ON t.managerName=s_m.accountName
+		WHERE
+		t.wages_month = #{wagesMonth}
+		AND t.wages_year = #{wagesYear}
+		AND t.state = 0
+		and LENGTH(t.managerName)=18
+		and s_m.mail != ' ';
+	</select>
+
+    <sql id="conditionForPage">
+        <if test="obj.id != null">
+            AND t.id = #{obj.id}
+        </if>
+        <if test="obj.managerId != null">
+            AND t.managerId = #{obj.managerId}
+        </if>
+        <if test="obj.wagesMonth != null">
+            AND t.wages_month = #{obj.wagesMonth}
+        </if>
+        <if test="obj.wagesYear != null">
+            AND t.wages_year = #{obj.wagesYear}
+        </if>
+        <if test="obj.createBy != null">
+            AND t.createBy = #{obj.createBy}
+        </if>
+        <if test="obj.createTime != null and obj.createTime != ''">
+            AND t.createTime = #{obj.createTime}
+        </if>
+        <if test="obj.memo != null and obj.memo != ''">
+            AND t.memo = #{obj.memo}
+        </if>
+    </sql>
+
+
+    <insert id="insert" parameterType="map">
+        <selectKey keyProperty="id" resultType="long">
+            select
+            LAST_INSERT_ID()
+        </selectKey>
+        insert into wages_reparent(
+        managerName,
+        wages_month,
+        wages_year,
+        createBy,
+        createTime,
+        memo
+        ) values (
+        #{managerName},
+        #{wagesMonth},
+        #{wagesYear},
+        #{createBy},
+        #{createTime},
+        #{memo}
+        )
+    </insert>
+
+    <update id="edit" parameterType="map">
+        update wages_parent t
+        <set>
+            <if test="managerName != null and managerName != ''">
+                t.managerName = #{managerName},
+            </if>
+            <if test="wagesMonth != null and wagesMonth != ''">
+                t.wages_month = #{wagesMonth},
+            </if>
+            <if test="wagesYear != null and wagesYear != ''">
+                t.wages_year = #{wagesYear},
+            </if>
+            <if test="createBy != null and createBy != ''">
+                t.createBy = #{createBy},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                t.createTime = #{createTime},
+            </if>
+            <if test="memo != null and memo != ''">
+                t.memo = #{memo},
+            </if>
+        </set>
+        where t.id=#{id}
+    </update>
+
+
+    <update id="editState" parameterType="map">
+		update wages_reparent t
+		set
+		t.state=1
+		where t.id=#{id}
+	</update>
+
+    <delete id="remove" parameterType="map">
+		delete from wages_reparent
+		where wages_month=#{wagesMonth} AND wages_year=#{wagesYear}
+	</delete>
+
+</mapper>

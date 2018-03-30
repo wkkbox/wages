@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dylan.web.log.mapper.LogMapper">
+
+	<select id="selectList" resultType="com.dylan.core.entity.E"
+		parameterType="map">
+		select logId,logLevel,content,recordTime,serviceModule,logName from
+		log_logs
+		where 1=1
+		<if test="logName != null and logName != ''">
+			and logName like CONCAT('%',#{logName},'%')
+		</if>
+		order by logId DESC
+	</select>
+
+	<insert id="insert" parameterType="map">
+		insert into log_logs
+		(
+		logLevel,content,recordTime,serviceModule,logName
+		)
+		values
+		(
+		#{logLevel},#{content},#{recordTime},#{serviceModule},#{logName}
+		)
+	</insert>
+</mapper>

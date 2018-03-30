@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dylan.web.wages.mapper.WagesReHeaderValueMapper">
+
+	<sql id="selectColumn">
+		t.id as id,
+		t.headerId as headerId,
+		t.parentId as parentId,
+		t.header_value as headerValue,
+		t.createBy as createBy,
+		t.createTime as
+		createTime,
+		t.salt as salt,
+		t.memo as memo
+	</sql>
+
+	<sql id="queryCondition">
+		<if test="id != null">
+			AND t.id = #{id}
+		</if>
+		<if test="headerId != null">
+			AND t.headerId = #{headerId}
+		</if>
+		<if test="parentId != null">
+			AND t.parentId = #{parentId}
+		</if>
+		<if test="headerValue != null and headerValue != ''">
+			AND t.header_value = #{headerValue}
+		</if>
+		<if test="createBy != null">
+			AND t.createBy = #{createBy}
+		</if>
+		<if test="createTime != null and createTime != ''">
+			AND t.createTime = #{createTime}
+		</if>
+		<if test="memo != null and memo != ''">
+			AND t.memo = #{memo}
+		</if>
+	</sql>
+
+	<select id="selectList" resultType="com.dylan.core.entity.E"
+		parameterType="map">
+		select
+		<include refid="selectColumn" />
+		from wages_header_value as t
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<include refid="queryCondition" />
+		</trim>
+	</select>
+
+	<sql id="conditionForPage">
+		<if test="obj.id != null">
+			AND t.id = #{obj.id}
+		</if>
+		<if test="obj.headerId != null">
+			AND t.headerId = #{obj.headerId}
+		</if>
+		<if test="obj.parentId != null">
+			AND t.parentId = #{obj.parentId}
+		</if>
+		<if test="obj.headerValue != null and obj.headerValue != ''">
+			AND t.header_value = #{obj.headerValue}
+		</if>
+		<if test="obj.createBy != null">
+			AND t.createBy = #{obj.createBy}
+		</if>
+		<if test="obj.createTime != null and obj.createTime != ''">
+			AND t.createTime = #{obj.createTime}
+		</if>
+		<if test="obj.memo != null and obj.memo != ''">
+			AND t.memo = #{obj.memo}
+		</if>
+	</sql>
+
+
+
+	<insert id="insert" parameterType="map">
+		<selectKey keyProperty="id" resultType="long">
+			select
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		wages_reheader_value(
+		headerId,
+		parentId,
+		salt,
+		header_value,
+		createBy,
+		createTime,
+		memo
+		) values (
+		#{headerId},
+		#{parentId},
+		#{salt},
+		#{headerValue},
+		#{createBy},
+		#{createTime},
+		#{memo}
+		)
+	</insert>
+
+	<update id="edit" parameterType="map">
+		update wages_header_value t
+		<set>
+
+			<if test="headerId != null and headerId != ''">
+				t.headerId = #{headerId},
+			</if>
+			<if test="parentId != null and parentId != ''">
+				t.parentId = #{parentId},
+			</if>
+			<if test="headerValue != null and headerValue != ''">
+				t.header_value = #{headerValue},
+			</if>
+			<if test="createBy != null and createBy != ''">
+				t.createBy = #{createBy},
+			</if>
+			<if test="createTime != null and createTime != ''">
+				t.createTime = #{createTime},
+			</if>
+			<if test="memo != null and memo != ''">
+				t.memo = #{memo},
+			</if>
+		</set>
+		where t.id=#{id}
+	</update>
+
+	<delete id="remove" parameterType="map">
+		delete from wages_header_value
+		where id=#{id}
+	</delete>
+
+</mapper>
