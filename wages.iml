@@ -12,7 +12,18 @@
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">
-      <configuration />
+      <configuration>
+        <fileset id="fileset" name="Spring Application Context" removed="false">
+          <file>file://$MODULE_DIR$/build/classes/applicationContext-shiro.xml</file>
+          <file>file://$MODULE_DIR$/src/applicationContext-shiro.xml</file>
+          <file>file://$MODULE_DIR$/src/applicationContext.xml</file>
+          <file>file://$MODULE_DIR$/build/classes/applicationContext.xml</file>
+          <file>file://$MODULE_DIR$/src/spring-mvc.xml</file>
+          <file>file://$MODULE_DIR$/build/classes/spring-mvc.xml</file>
+          <file>file://$MODULE_DIR$/build/classes/spring-mybatis.xml</file>
+          <file>file://$MODULE_DIR$/src/spring-mybatis.xml</file>
+        </fileset>
+      </configuration>
     </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">

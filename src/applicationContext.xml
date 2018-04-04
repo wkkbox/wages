@@ -85,12 +85,12 @@
     <bean id="CronTriggerFactoryBean"
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="SpringQtzJobMethod"></property>
-        <property name="cronExpression" value="0 12 14 ? * *"></property>
+        <property name="cronExpression" value="0 30 09 ? * *"></property>
     </bean>
     <bean id="ReCronTriggerFactoryBean"
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="SpringReQtzJobMethod"></property>
-        <property name="cronExpression" value="0 22 14 ? * *"></property>
+        <property name="cronExpression" value="0 30 14 ? * *"></property>
     </bean>
 
     <!-- ======================== 调度工厂 ======================== -->

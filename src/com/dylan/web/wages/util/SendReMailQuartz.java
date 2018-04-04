@@ -69,7 +69,11 @@ public class SendReMailQuartz {
                                 } else {
                                     headerValue = selectWagesParent.get(j).getStr("hreaderValue");
                                 }
-                                sb.append(header + "  :  " + headerValue + "<br>	");
+                                if ("实发合计".equals(header)) {
+                                    sb.append("<span style='color: red'>" + header + "</span>" + "  :  " + headerValue + "<br>	");
+                                } else {
+                                    sb.append(header + "  :  " + headerValue + "<br>	");
+                                }
                             }
                             // System.out.println("user.getStr(mail)=" +
                             // user.getStr("mail"));
@@ -109,7 +113,11 @@ public class SendReMailQuartz {
                                 } else {
                                     headerValue = selectWagesParent.get(j).getStr("hreaderValue");
                                 }
-                                sb.append(header + "  :  " + headerValue + "<br>	");
+                                if ("实发合计".equals(header)) {
+                                    sb.append("<span style='color: red'>" + header + "</span>" + "  :  " + headerValue + "<br>	");
+                                } else {
+                                    sb.append(header + "  :  " + headerValue + "<br>	");
+                                }
                             }
                             // System.out.println("user.getStr(mail)=" +
                             // user.getStr("mail"));
